@@ -1,4 +1,4 @@
-/* Copyright Steel Business Breifing, FreeBSD-License
+/* Copyright Steel Business Briefing, FreeBSD-License
  * simple flot plugin to draw bar numbers halfway in bars
  *
  * options are
