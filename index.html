@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../excanvas.min.js"></script><![endif]-->
+    <script language="javascript" type="text/javascript" src="jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="jquery.flot.min.js"></script>
+    <script language="javascript" type="text/javascript" src="jquery.flot.barnumbers.js"></script>
+ </head>
+    <body>
+    <h1>Example</h1>
+    <div id="placeholder" style="width:600px;height:300px"></div>
+<script type="text/javascript">
+$(function () {
+    var d2 = [[0, 3], [4, 8], [8, 5], [9, 13]];
+    options = {
+        bars : {
+            show : true,
+            showNumbers: true,
+        }
+    };
+    $.plot($("#placeholder"), [
+        {
+            data: d2,
+        }
+    ], options);
+});
+</script>
+
+    </body>
+</html>
+
