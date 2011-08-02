@@ -4,7 +4,7 @@
  * options are
  * series: {
  *     bars: {
- *         barNumbers: boolean
+ *         showNumbers: boolean
  *     }
  * }
  */
