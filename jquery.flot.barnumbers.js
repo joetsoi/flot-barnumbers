@@ -1,4 +1,4 @@
-/* Copyright Steel Business Briefing, FreeBSD-License
+/* Copyright Joe Tsoi, FreeBSD-License
  * simple flot plugin to draw bar numbers halfway in bars
  *
  * options are
@@ -14,28 +14,31 @@
     };
 
     function init(plot) {
-        function drawNumbers(plot, ctx, series){
+        plot.hooks.drawSeries.push(function (plot, ctx, series){
             if(series.bars.showNumbers){
+		var ps = series.datapoints.pointsize
                 var points = series.datapoints.points
                 var ctx = plot.getCanvas().getContext('2d');
                 var offset = plot.getPlotOffset();
                 ctx.textBaseline = "top";
                 ctx.textAlign = "center";
-                if(series.bars.align == "left")
-                    alignOffset = series.bars.barWidth / 2;
-                else
-                    alignOffset = 0;
-
-                for(var datapoint in points){
-                    if((datapoint - 1) % 3 == 0){
-                        var point = { 'x': points[datapoint - 1] + alignOffset, 'y': points[datapoint] / 2 }
-                        var c = plot.p2c(point);
-                        ctx.fillText(points[datapoint].toString(10), c.left + offset.left, c.top + offset.top)
-                    }
-                }
+		alignOffset = series.bars.align === "left" ? series.bars.barWidth / 2 : 0;
+		function half(x){ return x/2; }
+		function align(x){ return x + alignOffset; }
+		function drawPoints(shiftX, shiftY){
+			for(var i = 0; i < points.length; i += ps){
+				var point = { 'x': shiftX(points[i]),  'y': shiftY(points[i+1])}
+				var c = plot.p2c(point);
+				ctx.fillText(points[i].toString(10), c.left + offset.left, c.top + offset.top)
+			}
+		}
+		if(series.bars.horizontal){
+			drawPoints(half, align);
+		} else {
+			drawPoints(align, half);
+		}
             }
-        }
-        plot.hooks.drawSeries.push(drawNumbers);
+        });
     }
 
     $.plot.plugins.push({
