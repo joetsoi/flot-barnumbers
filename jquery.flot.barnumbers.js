@@ -46,7 +46,6 @@
                             'x': shiftX(points[i]),
                             'y': shiftY(points[i+1])
                         };
-                        console.log(shiftX);
                         var c = plot.p2c(point);
                         ctx.fillText(points[i].toString(10), c.left + offset.left, c.top + offset.top)
                     }
