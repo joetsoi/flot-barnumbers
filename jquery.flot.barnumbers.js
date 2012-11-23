@@ -38,22 +38,40 @@
                 ctx.textBaseline = "top";
                 ctx.textAlign = "center";
                 alignOffset = series.bars.align === "left" ? series.bars.barWidth / 2 : 0;
-                function drawPoints(xAlign, yAlign){
-                    var shiftX = typeof xAlign == "number" ? function(x){ return x; } : xAlign;
-                    var shiftY = typeof yAlign == "number" ? function(y){ return y; } : yAlign;
+                xAlign = series.bars.numbers.xAlign;
+                yAlign = series.bars.numbers.yAlign;
+                var shiftX = typeof xAlign == "number" ? function(x){ return x; } : xAlign;
+                var shiftY = typeof yAlign == "number" ? function(y){ return y; } : yAlign;
+                if(series.bars.horizontal){
                     for(var i = 0; i < points.length; i += ps){
+                        text = points[i];
+                        var point = {
+                            'x': shiftY(points[i]),
+                            'y': shiftX(points[i+1])
+                        };
+                        if(series.stack != null){
+                            point.x = (points[i] - series.data[i/3][0] / 2);
+                            console.log(point.x);
+                            text = series.data[i/3][1];
+                        }
+                        var c = plot.p2c(point);
+                        ctx.fillText(text.toString(10), c.left + offset.left, c.top + offset.top)
+                    }
+                } else {
+                    for(var i = 0; i < points.length; i += ps){
+                        text = points[i+1];
                         var point = {
                             'x': shiftX(points[i]),
                             'y': shiftY(points[i+1])
                         };
+                        if(series.stack != null){
+                            point.y = (points[i+1] - series.data[i/3][1] / 2);
+                            console.log(point.x);
+                            text = series.data[i/3][1];
+                        }
                         var c = plot.p2c(point);
-                        ctx.fillText(points[i].toString(10), c.left + offset.left, c.top + offset.top)
+                        ctx.fillText(text.toString(10), c.left + offset.left, c.top + offset.top)
                     }
-                }
-                if(series.bars.horizontal){
-                    drawPoints(series.bars.numbers.yAlign, series.bars.numbers.xAlign);
-                } else {
-                    drawPoints(series.bars.numbers.xAlign, series.bars.numbers.yAlign);
                 }
             }
         });
