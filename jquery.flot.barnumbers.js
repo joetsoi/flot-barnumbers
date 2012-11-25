@@ -17,70 +17,71 @@
     var options = {
         bars: {
             numbers: {
-                show : false,
             }
         }
     };
-
-    function init(plot) {
-        plot.hooks.processOptions.push(function (plot, options){
-            var bw = options.series.bars.barWidth;
-            var numbers = options.series.bars.numbers;
+    
+    function processOptions(plot, options) {
+        var bw = options.series.bars.barWidth;
+        var numbers = options.series.bars.numbers;
+        var horizontal = options.series.bars.horizontal;
+        if(horizontal){
+            numbers.xAlign = numbers.xAlign || function(x){ return x / 2; };
+            numbers.yAlign = numbers.yAlign || function(y){ return y + (bw / 2); };
+            numbers.horizontalShift = 0;
+        } else {
             numbers.xAlign = numbers.xAlign || function(x){ return x + (bw / 2); };
             numbers.yAlign = numbers.yAlign || function(y){ return y / 2; };
-        });
-        plot.hooks.drawSeries.push(function (plot, ctx, series){
-            if(series.bars.numbers.show || series.bars.showNumbers){
-                var ps = series.datapoints.pointsize;
-                var points = series.datapoints.points;
-                var ctx = plot.getCanvas().getContext('2d');
-                var offset = plot.getPlotOffset();
-                ctx.textBaseline = "top";
-                ctx.textAlign = "center";
-                alignOffset = series.bars.align === "left" ? series.bars.barWidth / 2 : 0;
-                xAlign = series.bars.numbers.xAlign;
-                yAlign = series.bars.numbers.yAlign;
-                var shiftX = typeof xAlign == "number" ? function(x){ return x; } : xAlign;
-                var shiftY = typeof yAlign == "number" ? function(y){ return y; } : yAlign;
-                if(series.bars.horizontal){
-                    for(var i = 0; i < points.length; i += ps){
-                        text = points[i];
-                        var point = {
-                            'x': shiftY(points[i]),
-                            'y': shiftX(points[i+1])
-                        };
-                        if(series.stack != null){
-                            point.x = (points[i] - series.data[i/3][0] / 2);
-                            console.log(point.x);
-                            text = series.data[i/3][1];
-                        }
-                        var c = plot.p2c(point);
-                        ctx.fillText(text.toString(10), c.left + offset.left, c.top + offset.top)
-                    }
+            numbers.horizontalShift = 1;
+        }
+    }
+
+    function drawSeries(plot, ctx, series){
+        if(series.bars.numbers.show || series.bars.showNumbers){
+            var ps = series.datapoints.pointsize;
+            var points = series.datapoints.points;
+            var ctx = plot.getCanvas().getContext('2d');
+            var offset = plot.getPlotOffset();
+            ctx.textBaseline = "top";
+            ctx.textAlign = "center";
+            alignOffset = series.bars.align === "left" ? series.bars.barWidth / 2 : 0;
+            xAlign = series.bars.numbers.xAlign;
+            yAlign = series.bars.numbers.yAlign;
+            var shiftX = typeof xAlign == "number" ? function(x){ return x; } : xAlign;
+            var shiftY = typeof yAlign == "number" ? function(y){ return y; } : yAlign;
+
+            axes = {
+                0 : 'x',
+                1 : 'y'
+            } 
+            hs = series.bars.numbers.horizontalShift;
+            for(var i = 0; i < points.length; i += ps){
+                barNumber = i + series.bars.numbers.horizontalShift
+                var point = {
+                    'x': shiftX(points[i]),
+                    'y': shiftY(points[i+1])
+                };
+                if(series.stack != null){
+                    point[axes[hs]] = (points[barNumber] - series.data[i/3][hs] / 2);
+                    text = series.data[i/3][hs];
                 } else {
-                    for(var i = 0; i < points.length; i += ps){
-                        text = points[i+1];
-                        var point = {
-                            'x': shiftX(points[i]),
-                            'y': shiftY(points[i+1])
-                        };
-                        if(series.stack != null){
-                            point.y = (points[i+1] - series.data[i/3][1] / 2);
-                            console.log(point.x);
-                            text = series.data[i/3][1];
-                        }
-                        var c = plot.p2c(point);
-                        ctx.fillText(text.toString(10), c.left + offset.left, c.top + offset.top)
-                    }
+                    text = points[barNumber];
                 }
+                var c = plot.p2c(point);
+                ctx.fillText(text.toString(10), c.left + offset.left, c.top + offset.top)
             }
-        });
+        }
+    }
+    
+    function init(plot) {
+        plot.hooks.processOptions.push(processOptions);
+        plot.hooks.drawSeries.push(drawSeries);
     }
 
     $.plot.plugins.push({
         init: init,
         options: options,
         name: 'barnumbers',
-        version: '0.3'
+        version: '0.4'
     });
 })(jQuery);
