@@ -5,11 +5,14 @@
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="excanvas.min.js"></script><![endif]-->
     <script language="javascript" type="text/javascript" src="jquery.js"></script>
     <script language="javascript" type="text/javascript" src="jquery.flot.js"></script>
+    <script type="text/javascript" src="jquery.flot.stack.js"></script>
     <script language="javascript" type="text/javascript" src="jquery.flot.barnumbers.js"></script>
  </head>
     <body>
     <h1>Example</h1>
     <div id="placeholder" style="width:600px;height:300px"></div>
+    <div id="stacked" style="width:550px;height:200px;"></div>
+    <div id="horizontalStacked" style="width:550px;height:200px;"></div>
 <script type="text/javascript">
 $(function () {
     var d2 = [[0, 3], [4, 8], [8, 5], [9, 13]];
@@ -24,6 +27,56 @@ $(function () {
             data: d2,
         }
     ], options);
+
+
+    var css_id = "#stacked";
+    var stackedData = [
+        {label: 'foo', data: [[1,300], [2,300], [3,300], [4,300], [5,300]]},
+        {label: 'bar', data: [[1,800], [2,600], [3,400], [4,200], [5,0]]},
+        {label: 'baz', data: [[1,100], [2,200], [3,300], [4,400], [5,500]]},
+
+    ];
+    var stackedOptions = {
+        series: {
+            stack: 0,
+            lines: {show: false, steps: false },
+            bars: {
+        //        horizontal: true,
+                show: true,
+                barWidth: 0.9,
+                //align: 'center',
+                numbers :{
+                    show: true,
+                },
+            },
+        },
+    };
+
+    $.plot($(css_id), stackedData, stackedOptions);
+    
+    var horizontal_css = "#horizontalStacked";
+    var horizontal = [
+        {label: 'foo', data: [[1,2], [2,3], [3,4], [4,5], [5,6]]},
+        {label: 'bar', data: [[2,2], [2,3], [3,4], [4,5], [5,6]]},
+    ];
+    var horizontal_options = {
+        series: {
+            stack: 0,
+            lines: {show: false, steps: false },
+            bars: {
+                horizontal: true,
+                show: true,
+                barWidth: 0.9,
+                //align: 'center',
+                numbers :{
+                    show: true,
+                },
+            },
+        },
+    };
+
+    $.plot($(horizontal_css), horizontal, horizontal_options);
+    
 });
 </script>
 
