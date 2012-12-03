@@ -11,6 +11,7 @@
     <body>
     <h1>Example</h1>
     <div id="placeholder" style="width:600px;height:300px"></div>
+    <div id="above" style="width:600px;height:300px"></div>
     <div id="stacked" style="width:550px;height:200px;"></div>
     <div id="horizontalStacked" style="width:550px;height:200px;"></div>
 <script type="text/javascript">
@@ -28,6 +29,20 @@ $(function () {
         }
     ], options);
 
+    options = {
+        bars : {
+            show : true,
+            showNumbers: true,
+            numbers : {
+                yAlign: function(y) { return y + 1; },
+            },
+        }
+    };
+    $.plot($("#above"), [
+        {
+            data: d2,
+        }
+    ], options);
 
     var css_id = "#stacked";
     var stackedData = [
@@ -70,6 +85,8 @@ $(function () {
                 //align: 'center',
                 numbers :{
                     show: true,
+
+
                 },
             },
         },
