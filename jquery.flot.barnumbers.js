@@ -36,46 +36,49 @@
         }
     }
 
-    function drawSeries(plot, ctx, series){
-        if(series.bars.numbers.show || series.bars.showNumbers){
-            var ps = series.datapoints.pointsize;
-            var points = series.datapoints.points;
-            var ctx = plot.getCanvas().getContext('2d');
-            var offset = plot.getPlotOffset();
-            ctx.textBaseline = "top";
-            ctx.textAlign = "center";
-            alignOffset = series.bars.align === "left" ? series.bars.barWidth / 2 : 0;
-            xAlign = series.bars.numbers.xAlign;
-            yAlign = series.bars.numbers.yAlign;
-            var shiftX = typeof xAlign == "number" ? function(x){ return x; } : xAlign;
-            var shiftY = typeof yAlign == "number" ? function(y){ return y; } : yAlign;
-
-            axes = {
-                0 : 'x',
-                1 : 'y'
-            } 
-            hs = series.bars.numbers.horizontalShift;
-            for(var i = 0; i < points.length; i += ps){
-                barNumber = i + series.bars.numbers.horizontalShift
-                var point = {
-                    'x': shiftX(points[i]),
-                    'y': shiftY(points[i+1])
-                };
-                if(series.stack != null){
-                    point[axes[hs]] = (points[barNumber] - series.data[i/3][hs] / 2);
-                    text = series.data[i/3][hs];
-                } else {
-                    text = points[barNumber];
+    function drawSeries(plot, ctx){
+        $.each(plot.getData(), function(idx, series) {
+            if(series.bars.numbers.show || series.bars.showNumbers){
+                var ps = series.datapoints.pointsize;
+                var points = series.datapoints.points;
+                var ctx = plot.getCanvas().getContext('2d');
+                var offset = plot.getPlotOffset();
+                ctx.textBaseline = "top";
+                ctx.textAlign = "center";
+                alignOffset = series.bars.align === "left" ? series.bars.barWidth / 2 : 0;
+                xAlign = series.bars.numbers.xAlign;
+                yAlign = series.bars.numbers.yAlign;
+                var shiftX = typeof xAlign == "number" ? function(x){ return x; } : xAlign;
+                var shiftY = typeof yAlign == "number" ? function(y){ return y; } : yAlign;
+    
+                axes = {
+                    0 : 'x',
+                    1 : 'y'
+                } 
+                hs = series.bars.numbers.horizontalShift;
+                for(var i = 0; i < points.length; i += ps){
+                    barNumber = i + series.bars.numbers.horizontalShift
+                    var point = {
+                        'x': shiftX(points[i]),
+                        'y': shiftY(points[i+1])
+                    };
+                    if(series.stack != null){
+                        point[axes[hs]] = (points[barNumber] - series.data[i/3][hs] / 2);
+                        text = series.data[i/3][hs];
+                    } else {
+                        text = points[barNumber];
+                    }
+                    var c = plot.p2c(point);
+                    ctx.fillText(text.toString(10), c.left + offset.left, c.top + offset.top)
                 }
-                var c = plot.p2c(point);
-                ctx.fillText(text.toString(10), c.left + offset.left, c.top + offset.top)
             }
-        }
+        });
     }
     
     function init(plot) {
         plot.hooks.processOptions.push(processOptions);
         plot.hooks.drawSeries.push(drawSeries);
+        plot.hooks.draw.push(drawSeries);
     }
 
     $.plot.plugins.push({
