@@ -36,7 +36,7 @@
         }
     }
 
-    function drawSeries(plot, ctx){
+    function draw(plot, ctx){
         $.each(plot.getData(), function(idx, series) {
             if(series.bars.numbers.show || series.bars.showNumbers){
                 var ps = series.datapoints.pointsize;
@@ -77,8 +77,7 @@
     
     function init(plot) {
         plot.hooks.processOptions.push(processOptions);
-        plot.hooks.drawSeries.push(drawSeries);
-        plot.hooks.draw.push(drawSeries);
+        plot.hooks.draw.push(draw);
     }
 
     $.plot.plugins.push({
