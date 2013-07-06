@@ -14,15 +14,7 @@ simple flot plugin to draw bar numbers in bars, simply add
         }
     }
 
-The below will continue to work for now to prevent breaking of existing code
-
-    series: {
-        bars: {
-            showNumbers: boolean
-        }
-    }
-
-There are 2 other additional options
+There are other additional options
 
     series: {
         bars: {
