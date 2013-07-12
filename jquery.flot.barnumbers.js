@@ -6,8 +6,8 @@
  *     bars: {
  *         numbers : {
  *             show : boolean,
- *             alignX : number or function,
- *             alignY : number or function,
+ *             xAlign : null or function like function (x) {return x + 0.5;}, (if null, the text is in the middle)
+ *             yAlign : null or function like function (y) {return y + 0.5;}, (if null, the text is in the middle)
  *             font : {size : number, style : string, weight : string, family : string, color : string}
  *         }
  *     }
@@ -63,6 +63,7 @@
                 if (font) {
                     if (font.color) {
                         ctx.fillStyle = font.color;
+                        ctx.strokeStyle = font.color;  // for better look
                     }
                     
                     var fontStr = font.weight ? font.weight : "";
@@ -76,9 +77,6 @@
                 
                 var xAlign = series.bars.numbers.xAlign;
                 var yAlign = series.bars.numbers.yAlign;
-                
-                var shiftX = typeof xAlign == "number" ? function (x) {return x;} : xAlign;                
-                var shiftY = typeof yAlign == "number" ? function (y) {return y;} : yAlign;
 
                 var axes = {
                     0: 'x',
@@ -90,20 +88,27 @@
                     var barNumber = i + hs;
                     
                     var point = {
-                        'x': shiftX(points[i]),
-                        'y': shiftY(points[i + 1])
+                        'x': xAlign(points[i]),
+                        'y': yAlign(points[i + 1])
                     };
                     
                     var text;
                     if (series.stack != null) {
-                        point[axes[hs]] = (points[barNumber] - series.data[i / 3][hs] / 2);
-                        text = series.data[i / 3][hs];
+                        var value = series.data[i / 3][hs];
+                        point[axes[hs]] = (points[barNumber] - value + (hs == 0 ? xAlign(value) : yAlign(value)));
+                        text = value;
                     } else {
                         text = points[barNumber];
                     }
                     
                     var c = plot.p2c(point);
-                    ctx.fillText(text.toString(10), c.left + offset.left, c.top + offset.top + 1);
+                    var txt = text.toString(10);
+                    
+                    // stroke for better look
+                    ctx.lineWidth = 0.2;
+                    ctx.strokeText(txt, c.left + offset.left, c.top + offset.top + 1);
+                    
+                    ctx.fillText(txt, c.left + offset.left, c.top + offset.top + 1);
                 }
             }
         });
