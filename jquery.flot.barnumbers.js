@@ -36,8 +36,7 @@
         }
         
         var numbers = options.series.bars.numbers;
-        var horizontal = options.series.bars.horizontal;
-        
+        var horizontal = options.series.bars.horizontal;        
         if (horizontal) {
             numbers.xAlign = numbers.xAlign || function (x) {return x / 2;};
             numbers.yAlign = numbers.yAlign || function (y) {return y + alignOffset;};
@@ -47,11 +46,6 @@
             numbers.yAlign = numbers.yAlign || function (y) {return y / 2;};
             numbers.horizontalShift = 1;
         }
-        
-        numbers.xaxismin = options.xaxis.min;
-        numbers.xaxismax = options.xaxis.max;
-        numbers.yaxismin = options.yaxis.min;
-        numbers.yaxismax = options.yaxis.max;
     }
 
     function draw(plot, ctx) {
@@ -59,9 +53,10 @@
             if (series.bars.numbers.show) {
                 var ps = series.datapoints.pointsize;
                 var points = series.datapoints.points;
-                var ctx = plot.getCanvas().getContext('2d');
+                //var ctx = plot.getCanvas().getContext('2d');
                 var offset = plot.getPlotOffset();
                 
+                ctx.save();
                 ctx.textBaseline = "middle";
                 ctx.textAlign = "center";
                 
@@ -107,11 +102,11 @@
                         text = points[barNumber];
                     }
                     
-                    // check against axis min. / max.
-                    if ((series.bars.numbers.xaxismin && point.x < series.bars.numbers.xaxismin) ||
-                        (series.bars.numbers.xaxismax && point.x > series.bars.numbers.xaxismax) ||
-                        (series.bars.numbers.yaxismin && point.y < series.bars.numbers.yaxismin) ||
-                        (series.bars.numbers.yaxismax && point.y > series.bars.numbers.yaxismax)) {
+                    // check against axis min. / max.                  
+                    if ((series.xaxis.min && point.x < series.xaxis.min) ||
+                        (series.xaxis.max && point.x > series.xaxis.max) ||
+                        (series.yaxis.min && point.y < series.yaxis.min) ||
+                        (series.yaxis.max && point.y > series.yaxis.max)) {
                         // don't render this number because it is out of range
                         continue; 
                     }
@@ -125,6 +120,8 @@
                     
                     ctx.fillText(txt, c.left + offset.left, c.top + offset.top + 1);
                 }
+                
+                ctx.restore();
             }
         });
     }
