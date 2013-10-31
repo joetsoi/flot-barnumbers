@@ -7,6 +7,8 @@
  *         showNumbers: boolean (left for compatibility)
  *         numbers : {
  *             show : boolean,
+ *             font : string, 
+ *             style : string, 
  *             alignX : number or function,
  *             alignY : number or function,
  *         }
@@ -45,6 +47,8 @@
                 var offset = plot.getPlotOffset();
                 ctx.textBaseline = "top";
                 ctx.textAlign = "center";
+                ctx.font = typeof series.bars.numbers.font != "undefined" ? series.bars.numbers.font : "";
+                ctx.fillStyle = typeof series.bars.numbers.style != "undefined" ? series.bars.numbers.style : "";
                 alignOffset = series.bars.align === "left" ? series.bars.barWidth / 2 : 0;
                 xAlign = series.bars.numbers.xAlign;
                 yAlign = series.bars.numbers.yAlign;
@@ -84,6 +88,6 @@
         init: init,
         options: options,
         name: 'barnumbers',
-        version: '0.4'
+        version: '0.4.1'
     });
 })(jQuery);
