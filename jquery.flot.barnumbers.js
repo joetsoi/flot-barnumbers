@@ -7,8 +7,13 @@
  *         showNumbers: boolean (left for compatibility)
  *         numbers : {
  *             show : boolean,
- *             alignX : number or function,
- *             alignY : number or function,
+ *             xAlign : number or function,
+ *             yAlign : number or function,
+ *             textAlign : string (Canvas textAlign, default: 'center', Other valid options: start, end, left, right),
+ *             textBaseline : string (Canvas textBaseline, default: 'top', Other valid options: hanging, middle, alphabetic, ideographic, bottom),
+ *             offsetX : number (Additional x offset value, default: 0),
+ *             offsetY : number (Additional y offset value w.r.t bar, default: 0),
+ *             numberFormatter : function (To format the bar number)
  *         }
  *     }
  * }
@@ -20,7 +25,7 @@
             }
         }
     };
-    
+
     function processOptions(plot, options) {
         var bw = options.series.bars.barWidth;
         var numbers = options.series.bars.numbers;
@@ -34,6 +39,11 @@
             numbers.yAlign = numbers.yAlign || function(y){ return y / 2; };
             numbers.horizontalShift = 1;
         }
+        numbers.textAlign = numbers.textAlign || "center";
+        numbers.textBaseline = numbers.textBaseline || "top";
+        numbers.offsetX = numbers.offsetX || 0;
+        numbers.offsetY = numbers.offsetY || 0;
+        numbers.numberFormatter = numbers.numberFormatter || function(x){ return x;};
     }
 
     function draw(plot, ctx){
@@ -43,18 +53,18 @@
                 var points = series.datapoints.points;
                 var ctx = plot.getCanvas().getContext('2d');
                 var offset = plot.getPlotOffset();
-                ctx.textBaseline = "top";
-                ctx.textAlign = "center";
+                ctx.textBaseline = series.bars.numbers.textBaseline;
+                ctx.textAlign = series.bars.numbers.textAlign;
                 alignOffset = series.bars.align === "left" ? series.bars.barWidth / 2 : 0;
                 xAlign = series.bars.numbers.xAlign;
                 yAlign = series.bars.numbers.yAlign;
                 var shiftX = typeof xAlign == "number" ? function(x){ return x; } : xAlign;
                 var shiftY = typeof yAlign == "number" ? function(y){ return y; } : yAlign;
-    
+
                 axes = {
                     0 : 'x',
                     1 : 'y'
-                } 
+                }
                 hs = series.bars.numbers.horizontalShift;
                 for(var i = 0; i < points.length; i += ps){
                     barNumber = i + series.bars.numbers.horizontalShift
@@ -68,13 +78,16 @@
                     } else {
                         text = points[barNumber];
                     }
+                    var formattedText = series.bars.numbers.numberFormatter(text);
                     var c = plot.p2c(point);
-                    ctx.fillText(text.toString(10), c.left + offset.left, c.top + offset.top)
+                    var x = c.left + offset.left + series.bars.numbers.offsetX;
+                    var y = c.top + offset.top - series.bars.numbers.offsetY;
+                    ctx.fillText(formattedText, x, y);
                 }
             }
         });
     }
-    
+
     function init(plot) {
         plot.hooks.processOptions.push(processOptions);
         plot.hooks.draw.push(draw);
@@ -84,6 +97,6 @@
         init: init,
         options: options,
         name: 'barnumbers',
-        version: '0.4'
+        version: '0.5'
     });
 })(jQuery);
