@@ -20,7 +20,7 @@
             }
         }
     };
-    
+
     function processOptions(plot, options) {
         var bw = options.series.bars.barWidth;
         var numbers = options.series.bars.numbers;
@@ -38,7 +38,9 @@
 
     function draw(plot, ctx){
         $.each(plot.getData(), function(idx, series) {
-            if(series.bars.numbers.show || series.bars.showNumbers){
+            var show = (series.bars.numbers.show || series.bars.showNumbers);
+            if(show){
+                var formatter = jQuery.isFunction(show) ? show : function(s) { return s.toString(10) };
                 var ps = series.datapoints.pointsize;
                 var points = series.datapoints.points;
                 var ctx = plot.getCanvas().getContext('2d');
@@ -50,7 +52,7 @@
                 yAlign = series.bars.numbers.yAlign;
                 var shiftX = typeof xAlign == "number" ? function(x){ return x; } : xAlign;
                 var shiftY = typeof yAlign == "number" ? function(y){ return y; } : yAlign;
-    
+
                 axes = {
                     0 : 'x',
                     1 : 'y'
@@ -69,12 +71,12 @@
                         text = points[barNumber];
                     }
                     var c = plot.p2c(point);
-                    ctx.fillText(text.toString(10), c.left + offset.left, c.top + offset.top)
+                    ctx.fillText(formatter(text), c.left + offset.left, c.top + offset.top)
                 }
             }
         });
     }
-    
+
     function init(plot) {
         plot.hooks.processOptions.push(processOptions);
         plot.hooks.draw.push(draw);
