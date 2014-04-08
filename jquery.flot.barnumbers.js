@@ -7,8 +7,8 @@
  *         showNumbers: boolean (left for compatibility)
  *         numbers : {
  *             show : boolean,
- *             alignX : number or function,
- *             alignY : number or function,
+ *             xAlign : number or function,
+ *             yAlign : number or function,
  *         }
  *     }
  * }
