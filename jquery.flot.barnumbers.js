@@ -52,7 +52,7 @@
                 alignOffset = series.bars.align === "left" ? series.bars.barWidth / 2 : 0;
                 xAlign = series.bars.numbers.xAlign;
                 yAlign = series.bars.numbers.yAlign;
-				var shiftX = typeof xAlign == "number" ? function(x){ return x; } : xAlign;
+                var shiftX = typeof xAlign == "number" ? function(x){ return x; } : xAlign;
                 var shiftY = typeof yAlign == "number" ? function(y){ return y; } : yAlign;
     
                 axes = {
