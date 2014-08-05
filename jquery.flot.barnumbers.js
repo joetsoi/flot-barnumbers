@@ -30,11 +30,11 @@
             numbers.yAlign = numbers.yAlign || function(y){ return y + (bw / 2); };
             numbers.horizontalShift = 0;
         } else {
-			if(options.series.bars.align === "center") {
-	            numbers.xAlign = numbers.xAlign || function(x){ return x; };
-			} else {
-	            numbers.xAlign = numbers.xAlign || function(x){ return x + (bw / 2); };
-			}
+            if(options.series.bars.align === "center") {
+                numbers.xAlign = numbers.xAlign || function(x){ return x; };
+            } else {
+                numbers.xAlign = numbers.xAlign || function(x){ return x + (bw / 2); };
+            }
             numbers.yAlign = numbers.yAlign || function(y){ return y / 2; };
             numbers.horizontalShift = 1;
         }
@@ -51,7 +51,7 @@
                 ctx.textAlign = "center";
                 alignOffset = series.bars.align === "left" ? series.bars.barWidth / 2 : 0;
 				xAlign = series.bars.numbers.xAlign;
-                yAlign = series.bars.numbers.yAlign;
+				yAlign = series.bars.numbers.yAlign;
 				var shiftX = typeof xAlign == "number" ? function(x){ return x; } : xAlign;
                 var shiftY = typeof yAlign == "number" ? function(y){ return y; } : yAlign;
     
@@ -61,7 +61,7 @@
                 } 
                 hs = series.bars.numbers.horizontalShift;
                 for(var i = 0; i < points.length; i += ps){
-                	barNumber = i + series.bars.numbers.horizontalShift
+                    barNumber = i + series.bars.numbers.horizontalShift
                     var point = {
                         'x': shiftX(points[i]),
                         'y': shiftY(points[i+1])
