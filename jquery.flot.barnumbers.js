@@ -47,7 +47,7 @@
                 var points = series.datapoints.points;
                 var ctx = plot.getCanvas().getContext('2d');
                 var offset = plot.getPlotOffset();
-                ctx.textBaseline = "top";
+                ctx.textBaseline = "middle";
                 ctx.textAlign = "center";
                 alignOffset = series.bars.align === "left" ? series.bars.barWidth / 2 : 0;
                 xAlign = series.bars.numbers.xAlign;
