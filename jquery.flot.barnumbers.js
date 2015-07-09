@@ -30,7 +30,11 @@
             numbers.yAlign = numbers.yAlign || function(y){ return y + (bw / 2); };
             numbers.horizontalShift = 0;
         } else {
-            numbers.xAlign = numbers.xAlign || function(x){ return x + (bw / 2); };
+            if(options.series.bars.align === "center") {
+                numbers.xAlign = numbers.xAlign || function(x){ return x; };
+            } else {
+                numbers.xAlign = numbers.xAlign || function(x){ return x + (bw / 2); };
+            }
             numbers.yAlign = numbers.yAlign || function(y){ return y / 2; };
             numbers.horizontalShift = 1;
         }
@@ -43,7 +47,7 @@
                 var points = series.datapoints.points;
                 var ctx = plot.getCanvas().getContext('2d');
                 var offset = plot.getPlotOffset();
-                ctx.textBaseline = "top";
+                ctx.textBaseline = "middle";
                 ctx.textAlign = "center";
                 alignOffset = series.bars.align === "left" ? series.bars.barWidth / 2 : 0;
                 xAlign = series.bars.numbers.xAlign;

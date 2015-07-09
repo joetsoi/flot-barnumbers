@@ -41,4 +41,4 @@ are working on.
 
 Todo
 ====
-* currently breaks at series.bars.align : "center"
+None
