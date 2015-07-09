@@ -9,10 +9,12 @@ simple flot plugin to draw bar numbers in bars, simply add
     series: {
         bars: {
             numbers: {
-                show : boolean
+                show : boolean or function
             }
         }
     }
+
+If show is a function it will be used to format the numbers inside the bars.
 
 The below will continue to work for now to prevent breaking of existing code
 
