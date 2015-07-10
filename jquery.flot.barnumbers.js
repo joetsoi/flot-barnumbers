@@ -1,4 +1,4 @@
-/* Copyright Joe Tsoi, FreeBSD-License
+/* FreeBSD-License
  * simple flot plugin to draw bar numbers halfway in bars
  *
  * options are
