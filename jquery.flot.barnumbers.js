@@ -123,7 +123,9 @@
                     ctx.lineWidth = 0.2;
                     ctx.strokeText(txt, c.left + offset.left, c.top + offset.top + 1);
 
-                    ctx.fillText(txt, c.left + offset.left, c.top + offset.top + 1);
+                    if (text != null) {
+                        ctx.fillText(txt, c.left + offset.left, c.top + offset.top + 1);
+                    }
                 }
 
                 ctx.restore();
