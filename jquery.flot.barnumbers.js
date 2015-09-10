@@ -72,9 +72,9 @@
                         ctx.strokeStyle = font.color;  // for better look
                     }
 
-                    var fontStr = font.weight ? font.weight : "";
+                    var fontStr = font.size ? font.size + "px" : "";
                     fontStr = font.style ? fontStr + " " + font.style : fontStr;
-                    fontStr = font.size ? fontStr + " " + font.size + "px" : fontStr;
+                    fontStr = font.weight ? fontStr + " " + font.weight : fontStr;
                     fontStr = font.family ? fontStr + " " + font.family : fontStr;
                     if (fontStr !== "") {
                         ctx.font = fontStr;
