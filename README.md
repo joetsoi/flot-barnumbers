@@ -24,7 +24,8 @@ There are other additional options
                 show : boolean,
                 xAlign : null or function like function (x) {return x + 0.5;}, (if null, the text is in the middle)
                 yAlign : null or function like function (y) {return y + 0.5;}, (if null, the text is in the middle)
-                font : {size : number, style : string, weight : string, family : string, color : string}
+                font : {size : number, style : string, weight : string, family : string, color : string},
+                rotate : number (representing degrees)
             }
         }
     }

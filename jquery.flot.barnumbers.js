@@ -9,6 +9,7 @@
  *             xAlign : null or function like function (x) {return x + 0.5;}, (if null, the text is in the middle)
  *             yAlign : null or function like function (y) {return y + 0.5;}, (if null, the text is in the middle)
  *             font : {size : number, style : string, weight : string, family : string, color : string}
+ *             rotate : number
  *         }
  *     }
  * }
@@ -117,14 +118,34 @@
                     }
 
                     var c = plot.p2c(point);
-                    var txt = formatter(text)
+                    var txt = formatter(text);
 
-                    // stroke for better look
                     ctx.lineWidth = 0.2;
-                    ctx.strokeText(txt, c.left + offset.left, c.top + offset.top + 1);
 
-                    if (text != null) {
+                    // rotate the text the given degrees if provided (and is valid)
+                    if ($.isNumeric(series.bars.numbers.rotate)) {
+                      var degrees = series.bars.numbers.rotate;
+
+                      // save the context so we can restore to the previous canvas
+                      ctx.save();
+                      ctx.translate(c.left + offset.left, c.top + offset.top + 1);
+                      ctx.rotate(degrees * Math.PI / 180);
+
+                      // stroke for better look
+                      ctx.strokeText(txt, 0, 0);
+                      if (text != null) {
+                        ctx.fillText(txt, 0, 0);
+                      }
+
+                      // restore the canvas
+                      ctx.restore();
+
+                    } else {
+                      // stroke for better look
+                      ctx.strokeText(txt, c.left + offset.left, c.top + offset.top + 1);
+                      if (text != null) {
                         ctx.fillText(txt, c.left + offset.left, c.top + offset.top + 1);
+                      }
                     }
                 }
 
