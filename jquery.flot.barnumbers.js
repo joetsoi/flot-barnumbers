@@ -122,6 +122,14 @@
 
                     ctx.lineWidth = 0.2;
 
+                    var writeText = function(text, x, y) {
+                      // stroke for better look
+                      ctx.strokeText(text, x, y);
+                      if (text != null) {
+                        ctx.fillText(text, x, y);
+                      }
+                    };
+
                     // rotate the text the given degrees if provided (and is valid)
                     if ($.isNumeric(series.bars.numbers.rotate)) {
                       var degrees = series.bars.numbers.rotate;
@@ -131,21 +139,14 @@
                       ctx.translate(c.left + offset.left, c.top + offset.top + 1);
                       ctx.rotate(degrees * Math.PI / 180);
 
-                      // stroke for better look
-                      ctx.strokeText(txt, 0, 0);
-                      if (text != null) {
-                        ctx.fillText(txt, 0, 0);
-                      }
+                      // write the label
+                      writeText(txt, 0, 0);
 
                       // restore the canvas
                       ctx.restore();
 
                     } else {
-                      // stroke for better look
-                      ctx.strokeText(txt, c.left + offset.left, c.top + offset.top + 1);
-                      if (text != null) {
-                        ctx.fillText(txt, c.left + offset.left, c.top + offset.top + 1);
-                      }
+                      writeText(txt, c.left + offset.left, c.top + offset.top + 1);
                     }
                 }
 
