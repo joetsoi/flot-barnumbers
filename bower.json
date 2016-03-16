@@ -1,0 +1,10 @@
+{
+  "name": "flot.barnumbers",
+  "version": "0.0.1",
+  "license": "MIT",
+  "main": "jquery.flot.barnumbers.js",
+  "ignore": [
+    ".gitignore",
+    "README.md"
+  ]
+}
